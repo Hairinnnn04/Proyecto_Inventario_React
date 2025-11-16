@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import API_ENDPOINTS from '../config/apiConfig';
 
-const DispatchForm = ({ materials, onDispatch, fetchMaterials }) => {
+const DispatchForm = ({ materials, fetchMaterials }) => {
   const [selectedMaterialId, setSelectedMaterialId] = useState('');
   const [quantity, setQuantity] = useState('');
 
@@ -12,8 +12,8 @@ const DispatchForm = ({ materials, onDispatch, fetchMaterials }) => {
       return;
     }
 
-    const selectedMaterial = materials.find(material => material.id === parseInt(selectedMaterialId));
-    if (selectedMaterial && parseInt(quantity) > selectedMaterial.quantity) {
+    const selectedMaterial = materials.find(material => String(material.id) === String(selectedMaterialId));
+    if (selectedMaterial && parseFloat(quantity) > parseFloat(selectedMaterial.quantity)) {
       alert(`No se puede despachar más de lo disponible. Disponible: ${selectedMaterial.quantity}`);
       return;
     }
@@ -39,7 +39,7 @@ const DispatchForm = ({ materials, onDispatch, fetchMaterials }) => {
         alert('Despacho registrado correctamente');
         setQuantity('');
         setSelectedMaterialId('');
-        fetchMaterials(); // Actualizar la lista de materiales
+        if (fetchMaterials) fetchMaterials(); // Actualizar la lista de materiales si existe la función
       } else {
         alert('Error al registrar el despacho');
       }
